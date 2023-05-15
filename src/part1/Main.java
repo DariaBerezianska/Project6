@@ -1,9 +1,11 @@
+package part1;
+
 import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
         //Part1 LinkedList
-        System.out.println("Part1 LinkedList");
+        System.out.println("Part1 part1.LinkedList");
         LinkedList<Integer> list = new LinkedList<>();
         // add elements to the list
         list.add(60);

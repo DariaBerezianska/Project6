@@ -1,8 +1,6 @@
 package part2;
 
-import part2.Stack;
-
-public class Main1 {
+public class Main {
     public static void main(String[] args) {
         //Part2 Stack
         System.out.println("Part2 Stack");

@@ -1,15 +1,15 @@
+package part1;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
-public class LinkedList<T> implements Iterable {
+
+public class LinkedList<T> implements Iterable<T> {
     private Node<T> first;
     private Node<T> last;
     private int size;
 
     private static class Node<T> {
-
         T element;
         Node<T> prev;
         Node<T> next;
@@ -29,11 +29,11 @@ public class LinkedList<T> implements Iterable {
     }
 
     private class ListIterator implements Iterator<T> {
-        private Node<T> current = first;
+        private Node<T> current = first; //current node
 
         @Override
         public boolean hasNext() {
-            return current != null;
+            return current != null; //check if there's a next node
         }
 
         @Override
@@ -41,37 +41,38 @@ public class LinkedList<T> implements Iterable {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            T element = current.element;
-            current = current.next;
+            T element = current.element; //get the element of the current node
+            current = current.next; //move to the next node
             return element;
         }
     }
 
+    //add an element to the end of the list
     public void add(T e) {
         Node<T> node = new Node<>(last, e, null);
-        //if the list is not empty the next pointer of the last node to newNode
         if (last != null) {
-            last.next = node;
-            //else set first to the newNode
+            last.next = node; //if the list is not empty the next pointer of the last node point to newNode
         } else {
-            first = node;
+            first = node; //else set first to the newNode
         }
-        //set the last pointer of the list to the NewNode
-        last = node;
+        last = node; //update the last node to the new node
         size++;
     }
 
+    //add element to the beginning of the list
     public void addFirst(T e) {
         Node<T> node = new Node<>(null, e, first);
-        first = node;
-        if (first == null) {
-            last = node;
-        } else {
-            first.prev = node;
+        if (first != null) {
+            first.prev = node; //update the previous pointer of the current first node
+        }
+        first = node; //set the first node to the new node
+        if (last == null) {
+            last = node; //if the list was empty updating the last node
         }
         size++;
     }
 
+    //get the node at the specified index
     private Node<T> getNode(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
@@ -79,11 +80,13 @@ public class LinkedList<T> implements Iterable {
         Node<T> node;
         if (index < (size / 2)) {
             node = first;
+            //traverse the list from the beginning
             for (int i = 0; i < index; i++) {
                 node = node.next;
             }
         } else {
             node = last;
+            //traverse the list from the end
             for (int i = size - 1; i > index; i--) {
                 node = node.prev;
             }
@@ -91,65 +94,73 @@ public class LinkedList<T> implements Iterable {
         return node;
     }
 
+    //add element at the specified index
     public void add(int i, T e) {
         if (i < 0 || i > size) {
             throw new IndexOutOfBoundsException();
         }
         if (i == size) {
-            add(e);
+            add(e); //add the element to the end of the list
         } else if (i == 0) {
-            addFirst(e);
+            addFirst(e); //add the element to the begging of the list
         } else {
             Node<T> node = new Node<>(getNode(i - 1), e, getNode(i));
-            getNode(i - 1).next = node;
-            getNode(i).prev = node;
+            getNode(i - 1).next = node; //update the next pointer of the node at index i-1 to the new node
+            getNode(i).prev = node; //update the previous pointer of the node at index i to the new node
             size++;
         }
     }
 
+    //get element at the specified index
     public T get(int i) {
         if (i < 0 || i > size) {
             throw new IndexOutOfBoundsException();
         }
-        return getNode(i).element;
+        return getNode(i).element; //return the element of the node at the specified index
     }
 
+
+    //remove node from the list
     private void removeNode(Node<T> node) {
         if (node.prev == null) {
-            first = node.next;
+            first = node.next; //node to remove is the first node
         } else {
-            node.prev.next = node.next;
+            node.prev.next = node.next; //node to remove is not the first node
         }
         if (node.next == null) {
-            last = node.prev;
+            last = node.prev; //node to remove is the last node
         } else {
-            node.next.prev = node.prev;
+            node.next.prev = node.prev; //node to remove is not the last node
         }
         size--;
+        // if list is empty set first and last to null
         if (size == 0) {
             first = null;
             last = null;
         }
     }
 
+    //remove element that contains e
     public void remove(T e) {
         for (Node<T> node = first; node != null; node = node.next) {
             if (node.element.equals(e)) {
-                removeNode(node);
+                removeNode(node); //remove the node that contains the element
                 break;
             }
         }
     }
 
+    //remove element that has index
     public void remove(int i) {
-        Node<T> node = getNode(i);
-        removeNode(node);
+        Node<T> node = getNode(i); //get the node at the specified index
+        removeNode(node); //remove the node
     }
 
+    //remove all elements that contains e
     public void removeAll(T e) {
         for (Node<T> node = first; node != null; node = node.next) {
             if (node.element.equals(e)) {
-                removeNode(node);
+                removeNode(node); //remove the node that contains the element
             }
         }
     }
